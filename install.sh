@@ -9,6 +9,8 @@ WIREPLUMBER_CONF_DIR="${HOME}/.config/wireplumber/wireplumber.conf.d"
 UDEV_RULES_DIR="/etc/udev/rules.d"
 SYSTEMD_USER_DIR="${HOME}/.config/systemd/user"
 STATE_DIR="${HOME}/.config/omarchy-mic"
+OMARCHY_MIC_VERSION="0.1.0"
+OMARCHY_MIC_URL="https://github.com/DominicBoettger/omarchy-mic/releases/download/v${OMARCHY_MIC_VERSION}/omarchy-mic-x86_64-linux.tar.gz"
 DEEPFILTER_VERSION="0.5.6"
 DEEPFILTER_URL="https://github.com/Rikorose/DeepFilterNet/releases/download/v${DEEPFILTER_VERSION}/libdeep_filter_ladspa-${DEEPFILTER_VERSION}-x86_64-unknown-linux-gnu.so"
 
@@ -30,15 +32,10 @@ else
     echo "▸ DeepFilterNet already installed"
 fi
 
-# 3. Build omarchy-mic binary
-echo "▸ Building omarchy-mic..."
-cd "${SCRIPT_DIR}"
-cargo build --release --quiet
-
-# 4. Install binary
-echo "▸ Installing binary to ${OMARCHY_BIN}..."
+# 3. Download and install omarchy-mic binary
+echo "▸ Downloading omarchy-mic v${OMARCHY_MIC_VERSION}..."
 mkdir -p "${OMARCHY_BIN}"
-cp "${SCRIPT_DIR}/target/release/omarchy-mic" "${OMARCHY_BIN}/omarchy-mic"
+curl -L "${OMARCHY_MIC_URL}" | tar xz -C "${OMARCHY_BIN}"
 
 # 5. Install PipeWire filter config
 echo "▸ Installing PipeWire DeepFilterNet config..."

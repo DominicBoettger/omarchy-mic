@@ -16,14 +16,13 @@ Uses [DeepFilterNet](https://github.com/Rikorose/DeepFilterNet) — a deep neura
 ## Requirements
 
 - Arch Linux with PipeWire + WirePlumber
-- Rust toolchain (`rustup`)
 - `walker` (for mic picker UI)
 - `hidapi` (for MV7 USB HID, optional)
 
 ## Quick Install
 
 ```bash
-git clone https://github.com/YOUR_USER/omarchy-mic.git ~/Development/omarchy-mic
+git clone https://github.com/DominicBoettger/omarchy-mic.git ~/Development/omarchy-mic
 cd ~/Development/omarchy-mic
 ./install.sh
 ```
@@ -31,7 +30,7 @@ cd ~/Development/omarchy-mic
 The install script will:
 1. Install dependencies (`noise-suppression-for-voice`, `hidapi`)
 2. Download DeepFilterNet LADSPA plugin (~50MB, includes neural network model)
-3. Build the `omarchy-mic` Rust binary
+3. Download the pre-built `omarchy-mic` binary from GitHub releases
 4. Install PipeWire filter-chain config
 5. Install WirePlumber mic priority rules
 6. Install udev rules for Shure MV7 hotplug (requires sudo)
