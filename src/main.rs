@@ -348,6 +348,14 @@ fn cmd_waybar() {
     let noise_enabled = noise::is_enabled();
     let mv7_available = mv7::Mv7::is_available();
 
+    // Check mute state
+    let muted = std::process::Command::new("wpctl")
+        .args(["get-volume", "@DEFAULT_SOURCE@"])
+        .output()
+        .ok()
+        .map(|o| String::from_utf8_lossy(&o.stdout).contains("MUTED"))
+        .unwrap_or(false);
+
     // Show the actual physical mic being used
     let input_mic = if noise_active || noise_enabled {
         pipewire::get_rnnoise_input()
@@ -361,22 +369,28 @@ fn cmd_waybar() {
             .unwrap_or_else(|| "No mic".to_string())
     };
 
-    let icon = if noise_active {
-        "\u{f130}" // mic icon
+    let icon = if muted {
+        "\u{f131}" // mic-slash (muted)
     } else if noise_enabled {
-        "\u{f131}" // mic-slash
+        "\u{f130}" // mic (noise suppression on)
     } else {
-        "\u{f130}"
+        "\u{f130}" // mic (raw)
     };
 
-    let noise_status = if noise_active { "on" } else { "off" };
+    let noise_status = if muted {
+        "muted"
+    } else if noise_enabled {
+        "on"
+    } else {
+        "off"
+    };
 
     let tooltip = format!(
         "Mic: {input_mic}\nNoise suppression: {noise_status}\nMV7: {}",
         if mv7_available { "connected" } else { "disconnected" },
     );
 
-    let class = if noise_active { "active" } else { "inactive" };
+    let class = if muted { "muted" } else if noise_enabled { "active" } else { "inactive" };
 
     let obj = json!({
         "text": icon,
