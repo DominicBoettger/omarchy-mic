@@ -10,7 +10,13 @@ UDEV_RULES_DIR="/etc/udev/rules.d"
 SYSTEMD_USER_DIR="${HOME}/.config/systemd/user"
 STATE_DIR="${HOME}/.config/omarchy-mic"
 OMARCHY_MIC_VERSION="0.1.0"
-OMARCHY_MIC_URL="https://github.com/DominicBoettger/omarchy-mic/releases/download/v${OMARCHY_MIC_VERSION}/omarchy-mic-x86_64-linux.tar.gz"
+ARCH="$(uname -m)"
+case "${ARCH}" in
+    x86_64)  OMARCHY_MIC_ARCH="x86_64" ;;
+    aarch64) OMARCHY_MIC_ARCH="aarch64" ;;
+    *) echo "Error: unsupported architecture ${ARCH}" >&2; exit 1 ;;
+esac
+OMARCHY_MIC_URL="https://github.com/DominicBoettger/omarchy-mic/releases/download/v${OMARCHY_MIC_VERSION}/omarchy-mic-${OMARCHY_MIC_ARCH}-linux.tar.gz"
 DEEPFILTER_VERSION="0.5.6"
 DEEPFILTER_URL="https://github.com/Rikorose/DeepFilterNet/releases/download/v${DEEPFILTER_VERSION}/libdeep_filter_ladspa-${DEEPFILTER_VERSION}-x86_64-unknown-linux-gnu.so"
 
